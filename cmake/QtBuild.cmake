@@ -57,7 +57,11 @@ ENDIF("${isSystemDir}" STREQUAL "-1")
 
 # Default rpath settings: Use rpath for build tree as well as a full path for the installed binaries.
 # For origin builds, one needs to override CMAKE_INSTALL_RPATH for example with $ORIGIN/../lib
-SET(CMAKE_INSTALL_RPATH "${_default_install_rpath}" CACHE PATH "RPATH for installed binaries")
+if(NOT USE_ORIGIN_RPATH)
+set(CMAKE_INSTALL_RPATH "${_default_install_rpath}" CACHE PATH "RPATH for installed binaries")
+else()
+	set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/lib:$ORIGIN/../lib:$ORIGIN/../../lib" CACHE PATH "RPATH for installed binaries")
+endif()
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
